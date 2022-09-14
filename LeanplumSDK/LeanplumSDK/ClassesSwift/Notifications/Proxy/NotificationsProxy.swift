@@ -24,8 +24,22 @@ public class NotificationsProxy: NSObject {
     var isCustomAppDelegateUsed = false
     
     // UNNotificationPresentationOptionNone
+    // @objc @available(iOS 10.0, *)
+    // public lazy var pushNotificationPresentationOption:UNNotificationPresentationOptions = []
+    // Fix issue
+    private var pushNotificationPresentationOptionWrapper: Any?
     @objc @available(iOS 10.0, *)
-    public lazy var pushNotificationPresentationOption:UNNotificationPresentationOptions = []
+    public var pushNotificationPresentationOption:UNNotificationPresentationOptions {
+        get {
+            if let value = pushNotificationPresentationOptionWrapper as? UNNotificationPresentationOptions {
+                return value
+            } else {
+                return []
+            }
+        } set {
+            pushNotificationPresentationOptionWrapper = newValue
+        }
+    }
     
     let userNotificationDelegateName = "UNUserNotificationCenterDelegate"
     
